@@ -26,6 +26,10 @@ TunDevice::TunDevice( const string & name,
     interface_ioctl( *this, TUNSETIFF, name,
                      [] ( ifreq &ifr ) { ifr.ifr_flags = IFF_TUN; } );
 
+    /* increase txqueuelen to Linux's default 1000 */
+    interface_ioctl( SIOCSIFTXQLEN, name,
+                     [] ( ifreq &ifr ) { ifr.ifr_qlen = 1000; } );
+
     assign_address( name, addr, peer );
 }
 
